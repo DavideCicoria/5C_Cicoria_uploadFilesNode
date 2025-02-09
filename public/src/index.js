@@ -1,7 +1,19 @@
+const render = async () => {
+    const list = document.querySelector("#urlList");
+    const res2 = await fetch("/filelist") ;
+    const data2 = await res2.json() ;
+    list.innerHTML = "" ;
+    data2.forEach(element => {
+        console.log(element) ;
+        list.innerHTML += '<li class="list-group-item"><a id="link"' + 'href="' + element + '" class="">' + element + '</a></li>'
+    });
+}
+
+
 (async () => {
     const inputFile = document.querySelector('#file');
     const button = document.querySelector("#button");
-    const link = document.querySelector("#link");
+    
 
     handleSubmit = async (event) => {
         const formData = new FormData();
@@ -14,12 +26,12 @@
         try {
             const res = await fetch("/upload", fetchOptions);
             const data = await res.json();
-            link.setAttribute("href", data.url);
-            link.innerText = data.url;
+            await render() ;
         } catch (e) {
             console.log(e);
         }
     }
 
     button.onclick = handleSubmit;
+    await render() ;
 })();
